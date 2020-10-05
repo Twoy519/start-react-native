@@ -33,7 +33,10 @@ const column: Layout = {
   id: "column",
   name: "Column",
   layout: {
-    container: {},
+    container: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
   },
 };
 
