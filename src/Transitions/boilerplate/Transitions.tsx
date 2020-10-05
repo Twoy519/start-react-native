@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   ImageStyle,
@@ -7,7 +7,12 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { FlexibleCard as Card, StyleGuide, cards } from "../../components";
+import {
+  FlexibleCard as Card,
+  StyleGuide,
+  cards,
+  Selection,
+} from "../../components";
 
 interface Layout {
   id: string;
@@ -62,15 +67,26 @@ const wrap: Layout = {
   },
 };
 
-const currentLayout = wrap.layout;
+const layouts = [column, row, wrap];
 
 const Transitions = () => {
+  const [currentLayout, setCurrentLayout] = useState(layouts[0].layout);
   return (
-    <View style={[styles.container, currentLayout.container]}>
-      {cards.map((card) => (
-        <Card key={card.id} style={currentLayout.child} {...{ card }} />
+    <>
+      <View style={[styles.container, currentLayout.container]}>
+        {cards.map((card) => (
+          <Card key={card.id} style={currentLayout.child} {...{ card }} />
+        ))}
+      </View>
+      {layouts.map((layout) => (
+        <Selection
+          key={layout.id}
+          name={layout.name}
+          isSelected={layout.layout === currentLayout}
+          onPress={() => setCurrentLayout(layout.layout)}
+        />
       ))}
-    </View>
+    </>
   );
 };
 
