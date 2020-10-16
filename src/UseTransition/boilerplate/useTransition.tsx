@@ -24,16 +24,21 @@ const transformOrigin = -1 * (width / 2 - StyleGuide.spacing * 2);
 
 const UseTransition = () => {
   const [toggled, setToggled] = useState<0 | 1>(0);
+  const transition = useTransition(toggled, not(toggled), toggled);
   return (
     <View style={styles.container}>
       {cards.map((card, index) => {
-        let direction = 0;
-        if (index === 0) {
-          direction = -1;
-        } else if (index === 2) {
-          direction = 1;
-        }
-        const rotate = direction * (toggled ? Math.PI / 6 : 0);
+        const direction = interpolate(index, {
+          inputRange: [0, 1, 2],
+          outputRange: [-1, 0, 1],
+        });
+        const rotate = multiply(
+          direction,
+          interpolate(transition, {
+            inputRange: [0, 1],
+            outputRange: [0, Math.PI / 6],
+          })
+        );
         return (
           <Animated.View
             key={card.id}
@@ -42,7 +47,7 @@ const UseTransition = () => {
               {
                 transform: [
                   { translateX: transformOrigin },
-                  { rotate: `${rotate}rad` },
+                  { rotate },
                   { translateX: -transformOrigin },
                 ],
               },
