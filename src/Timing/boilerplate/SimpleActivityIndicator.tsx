@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 });
 
 interface SimpleActivityIndicatorProps {
-  progress: number;
+  progress: Animated.Value<number>;
 }
 
 const SimpleActivityIndicator = ({
